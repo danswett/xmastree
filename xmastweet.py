@@ -123,8 +123,30 @@ def xmasChase(strip, wait_ms=50):
         else:
             j = 0
 
+def xmasTheaterChase(strip, wait_ms=150, iterations=1000):
+# Movie theater light style chaser animation.
+        c = 0
+        for j in range(iterations):
+		for q in range(3):
+			for i in range(0, strip.numPixels(), 3):
+                            currentColor = name_to_rgb(xmasColor[c])
+                            colorR = gammaTable[currentColor[0]]
+                            colorG = gammaTable[currentColor[1]]
+                            colorB = gammaTable[currentColor[2]]
 
-def theaterChase(strip, color, wait_ms=50, iterations=10):
+                            strip.setPixelColor(i+q, Color(colorG, colorR, colorB) )
+                            if c < 4:
+                                c += 1
+                            else:
+                                c = 0
+
+			strip.show()
+			time.sleep(wait_ms/1000.0)
+			for i in range(0, strip.numPixels(), 3):
+				strip.setPixelColor(i+q, 0)
+
+
+def theaterChase(strip, wait_ms=100, iterations=10):
 # Movie theater light style chaser animation.
 	for j in range(iterations):
 		for q in range(3):
@@ -192,7 +214,8 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            xmasFade(strip,70, 1200)
+            xmasTheaterChase(strip)
+#            xmasFade(strip,70, 1200)
 #            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
 #            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 
