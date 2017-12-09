@@ -125,6 +125,7 @@ def xmasChase(strip, wait_ms=50):
 
 def xmasTheaterChase(strip, wait_ms=150, iterations=1000):
 # Movie theater light style chaser animation.
+        strip.setBrightness(50)
         c = 0
         for j in range(iterations):
 		for q in range(3):
