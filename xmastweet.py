@@ -208,7 +208,7 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            xmasFade(strip,60, 1000)
+            xmasFade(strip,60, 1200)
 #            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
 #            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 
