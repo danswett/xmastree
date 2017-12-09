@@ -6,13 +6,12 @@ import xmas_settings
 from twython import TwythonStreamer
 from neopixel import *
 from webcolors import *
-from sqlalchemy.exc import ProgrammingError
-
-db = dataset.connect(xmas_settings.CONNECTION_STRING)
 
 # LED colors:
-xmasColor = ['red', 'yellow', 'green', 'cornflowerblue', \
-        'darkorange','magenta']
+xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
+        'darkorange','NavajoWhite']
+
+xmasColor = ['red', 'royalblue', 'navajowhite', 'darkorange', 'limegreen']
 
 gammaTable = [int(pow(float(i) / 255.0, 2.8) * 255.0) for i in range(256)]
 
@@ -28,21 +27,6 @@ class twitterStream(TwythonStreamer):
         tweet_friendscount = data['user']['friends_count']
         tweet_text = data['text']
         tweet_convertedtime = datetime.datetime.fromtimestamp(tweet_timestamp/1000.0)
-
-
-        table = db[xmas_settings.TABLE_NAME]
-        try:
-            table.insert(dict(
-                tweet_id=tweet_id,
-                author=tweet_author,
-                name=tweet_fullname,
-                time=tweet_convertedtime,
-                friends=tweet_friendscount,
-                text=tweet_text,
-            ))
-        
-        except ProgrammingError as err:
-            print(err)
 
         if 'text' in data:
             print data['text'].encode('utf-8')
@@ -99,7 +83,7 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
         colorG = gammaTable[currentColor[1]]
         colorB = gammaTable[currentColor[2]]
         strip.setPixelColor(j, Color(colorG, colorR, colorB))
-        if c < 5:
+        if c < 4:
             c += 1
         else:
             c = 0
@@ -110,7 +94,7 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
             time.sleep(wait_ms/1000.0)
             
         for i in reversed(range(brightness)):
-            if i == 10:
+            if i == 15:
                 q = i
                 break
             else:
@@ -208,7 +192,7 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            xmasFade(strip,60, 1200)
+            xmasFade(strip,70, 1200)
 #            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
 #            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 
