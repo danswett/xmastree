@@ -46,52 +46,22 @@ class twitterStream(TwythonStreamer):
 def lightStrip(strip, color1, color2, brightness):
     for i in range(strip.numPixels()):
         if i % 2 == 0:
-            currentColor = name_to_rgb(color2)
-            colorR = gammaTable[currentColor[0]]
-            colorG = gammaTable[currentColor[1]]
-            colorB = gammaTable[currentColor[2]]
-            strip.setPixelColor(i, Color(colorG,colorR,colorB))
-
-        else:
-            currentColor = name_to_rgb(color1)
-            colorR = gammaTable[currentColor[0]]
-            colorG = gammaTable[currentColor[1]]
-            colorB = gammaTable[currentColor[2]]
-            strip.setPixelColor(i, Color(colorG,colorR,colorB))
-                
-    strip.setBrightness(brightness)
-    strip.show()
-
-def lightStrip2(strip, color1, color2, brightness):
-    for i in range(strip.numPixels()):
-        if i % 2 == 0:
             strip.setPixelColor(i, correctColor(color2))
         else:
-            strip.setPixelColor(i, correctColor(color2))
+            strip.setPixelColor(i, correctColor(color1))
     strip.setBrightness(brightness)
     strip.show()
 
 def colorWipe(strip, color, wait_ms=50):
     for i in range(strip.numPixels()):
-        currentColor = name_to_rgb(color)
-        colorR = gammaTable[currentColor[0]]
-        colorG = gammaTable[currentColor[1]]
-        colorB = gammaTable[currentColor[2]]
-
-        strip.setPixelColor(i, Color(colorG,colorR,colorB))
+        strip.setPixelColor(i, correctColor(color))
         strip.show()
         time.sleep(wait_ms/1000.0)
 
 def xmasWipe(strip, wait_ms=50):
     j = 0
     for i in range(strip.numPixels()):
-        currentColor = name_to_rgb(xmasColor[j])
-        colorR = gammaTable[currentColor[0]]
-        colorG = gammaTable[currentColor[1]]
-        colorB = gammaTable[currentColor[2]]
-
-        strip.setPixelColor(i, Color(colorG, colorR, colorB))
-        strip.setBrightness(80)
+        strip.setPixelColor(i, correctColor(xmasColor[j]))
         strip.show()
         time.sleep(wait_ms/1000.0)
         if j < 5:
@@ -103,11 +73,7 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
     c = 0
     q = 0
     for j in range(strip.numPixels()):
-        currentColor = name_to_rgb(xmasColor[c])
-        colorR = gammaTable[currentColor[0]]
-        colorG = gammaTable[currentColor[1]]
-        colorB = gammaTable[currentColor[2]]
-        strip.setPixelColor(j, Color(colorG, colorR, colorB))
+        strip.setPixelColor(j, correctColor(xmasColor[c]))
         if c < 4:
             c += 1
         else:
@@ -130,11 +96,7 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
 def colorFade(strip, color, brightness, fades, wait_ms=50):
     q = 0
     for j in range(strip.numPixels()):
-        currentColor = name_to_rgb(color)
-        colorR = gammaTable[currentColor[0]]
-        colorG = gammaTable[currentColor[1]]
-        colorB = gammaTable[currentColor[2]]
-        strip.setPixelColor(j, Color(colorG, colorR, colorB))
+        strip.setPixelColor(j, correctColor(color))
     
     for e in range(fades):
         for i in range(q, brightness):
@@ -155,36 +117,24 @@ def colorFade(strip, color, brightness, fades, wait_ms=50):
 def xmasChase(strip, wait_ms=50):
     j=0
     for i in range(strip.numPixels()):
-        currentColor = name_to_rgb(xmasColor[j])
-        colorR = gammaTable[currentColor[0]]
-        colorG = gammaTable[currentColor[1]]
-        colorB = gammaTable[currentColor[2]]
-
-        strip.setPixelColor(i, Color(colorG, colorR, colorB))
+        strip.setPixelColor(i, correctColor(xmasColor[j]))
         strip.setPixelColor(i-1, Color(0,0,0))
-        if i == 149:
-            strip.setPixelColor(i, Color(0,0,0))
         strip.setBrightness(255)
         strip.show()
         time.sleep(wait_ms/1000.0)
-        if j < 5:
+        if j < 4:
             j += 1
         else:
             j = 0
 
-def xmasTheaterChase(strip, wait_ms=150, iterations=1000):
+def xmasTheaterChase(strip, iterations, wait_ms=150):
 # Movie theater light style chaser animation.
         strip.setBrightness(50)
         c = 0
         for j in range(iterations):
 		for q in range(3):
 			for i in range(0, strip.numPixels(), 3):
-                            currentColor = name_to_rgb(xmasColor[c])
-                            colorR = gammaTable[currentColor[0]]
-                            colorG = gammaTable[currentColor[1]]
-                            colorB = gammaTable[currentColor[2]]
-
-                            strip.setPixelColor(i+q, Color(colorG, colorR, colorB) )
+                            strip.setPixelColor(i+q, correctColor(xmasColor[c]))
                             if c < 4:
                                 c += 1
                             else:
@@ -195,13 +145,12 @@ def xmasTheaterChase(strip, wait_ms=150, iterations=1000):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
-
-def theaterChase(strip, wait_ms=100, iterations=10):
+def theaterChase(strip,color,  wait_ms=100, iterations=10):
 # Movie theater light style chaser animation.
 	for j in range(iterations):
 		for q in range(3):
 			for i in range(0, strip.numPixels(), 3):
-				strip.setPixelColor(i+q, color)
+				strip.setPixelColor(i+q, correctColor(color))
 			strip.show()
 			time.sleep(wait_ms/1000.0)
 			for i in range(0, strip.numPixels(), 3):
@@ -264,10 +213,10 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            lightStrip2(strip, 'navajowhite', 'royalblue', 30)
- #            xmasTheaterChase(strip)
-#            xmasFade(strip,50, 1200)
-#            colorFade(strip, 'NavajoWhite', 50, 1200)
+                lightStrip(strip, 'navajowhite', 'royalblue', 30)
+#                xmasTheaterChase(strip, 10)
+#                xmasFade(strip,50, 10)
+#                colorFade(strip, 'NavajoWhite', 50, 1200)
 #            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
 #            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 

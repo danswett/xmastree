@@ -17,8 +17,9 @@ def correctColor(color):
     colorR = gammaTable[currentColor[0]]
     colorG = gammaTable[currentColor[1]]
     colorB = gammaTable[currentColor[2]]
-   
+    
     correctColor = (colorG, colorR, colorB)
     return convertColor(correctColor)
+
 
 
