@@ -42,9 +42,24 @@ class twitterStream(TwythonStreamer):
         print status_code
 
 # Define functions which animate LEDs in various ways.
-def lightLetter(position, color):
-        strip.setPixelColor(position, color)
-        strip.show()
+def lightStrip(strip, color1, color2, brightness):
+    for i in range(strip.numPixels()):
+        if i % 2 == 0:
+            currentColor = name_to_rgb(color2)
+            colorR = gammaTable[currentColor[0]]
+            colorG = gammaTable[currentColor[1]]
+            colorB = gammaTable[currentColor[2]]
+            strip.setPixelColor(i, Color(colorG,colorR,colorB))
+
+        else:
+            currentColor = name_to_rgb(color1)
+            colorR = gammaTable[currentColor[0]]
+            colorG = gammaTable[currentColor[1]]
+            colorB = gammaTable[currentColor[2]]
+            strip.setPixelColor(i, Color(colorG,colorR,colorB))
+                
+    strip.setBrightness(brightness)
+    strip.show()
 
 def colorWipe(strip, color, wait_ms=50):
     for i in range(strip.numPixels()):
@@ -87,6 +102,30 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
             c += 1
         else:
             c = 0
+    for e in range(fades):
+        for i in range(q, brightness):
+            strip.setBrightness(i)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+            
+        for i in reversed(range(brightness)):
+            if i == 15:
+                q = i
+                break
+            else:
+                strip.setBrightness(i)
+                strip.show()
+                time.sleep(wait_ms/1000.0)
+
+def colorFade(strip, color, brightness, fades, wait_ms=50):
+    q = 0
+    for j in range(strip.numPixels()):
+        currentColor = name_to_rgb(color)
+        colorR = gammaTable[currentColor[0]]
+        colorG = gammaTable[currentColor[1]]
+        colorB = gammaTable[currentColor[2]]
+        strip.setPixelColor(j, Color(colorG, colorR, colorB))
+    
     for e in range(fades):
         for i in range(q, brightness):
             strip.setBrightness(i)
@@ -215,8 +254,10 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            xmasTheaterChase(strip)
-#            xmasFade(strip,70, 1200)
+            lightStrip(strip, 'navajowhite', 'royalblue', 30)
+ #            xmasTheaterChase(strip)
+#            xmasFade(strip,50, 1200)
+#            colorFade(strip, 'NavajoWhite', 50, 1200)
 #            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
 #            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 
