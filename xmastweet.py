@@ -6,6 +6,7 @@ import xmas_settings
 from twython import TwythonStreamer
 from neopixel import *
 from webcolors import *
+from colorcorrection import correctColor
 
 # LED colors:
 xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
@@ -58,6 +59,15 @@ def lightStrip(strip, color1, color2, brightness):
             colorB = gammaTable[currentColor[2]]
             strip.setPixelColor(i, Color(colorG,colorR,colorB))
                 
+    strip.setBrightness(brightness)
+    strip.show()
+
+def lightStrip2(strip, color1, color2, brightness):
+    for i in range(strip.numPixels()):
+        if i % 2 == 0:
+            strip.setPixelColor(i, correctColor(color2))
+        else:
+            strip.setPixelColor(i, correctColor(color2))
     strip.setBrightness(brightness)
     strip.show()
 
@@ -254,7 +264,7 @@ if __name__ == '__main__':
 	print ('Press Ctrl-C to quit.')
 
         try:
-            lightStrip(strip, 'navajowhite', 'royalblue', 30)
+            lightStrip2(strip, 'navajowhite', 'royalblue', 30)
  #            xmasTheaterChase(strip)
 #            xmasFade(strip,50, 1200)
 #            colorFade(strip, 'NavajoWhite', 50, 1200)
