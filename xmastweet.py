@@ -1,12 +1,29 @@
 import time
 import datetime
-import dataset
-import json
 import xmas_settings
-from twython import TwythonStreamer
+import logging
 from neopixel import *
 from webcolors import *
 from colorcorrection import correctColor
+from flask import Flask
+from flask_ask import Ask, statement, convert_errors
+
+# Define Flask
+app = Flask(__name__)
+ask = Ask(app, '/')
+
+logging.getLogger("flask_ask").setLevel(logging.DEBUG)
+
+@ask.intent('TreeIntent', mapping={'status': 'status', 'pattern': 'pattern'})
+
+def alexa_control(status, pattern):
+    if pattern in ['white']: lightStrip(strip, 'navajowhite', 'navajowhite', 30)
+    if pattern in ['colors']: xmasFade(strip, 30, 10)
+    if pattern in ['blue']: lightStrip(strip, 'navajowhite', 'royalblue', 30)
+    if pattern in ['off']: resetStrip(strip)
+
+    return statement('Setting tree to {}'.format(pattern))
+
 
 # LED colors:
 xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
@@ -14,33 +31,6 @@ xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
 
 xmasColor = ['red', 'royalblue', 'navajowhite', 'darkorange', 'limegreen']
 
-gammaTable = [int(pow(float(i) / 255.0, 2.8) * 255.0) for i in range(256)]
-
-# Setup callbacks from Twython Streamer
-class twitterStream(TwythonStreamer):
-
-    def on_success(self, data):
-        
-        tweet_id = data['id']
-        tweet_author = data['user']['screen_name']
-        tweet_fullname = data['user']['name']
-        tweet_timestamp = float(data['timestamp_ms'])
-        tweet_friendscount = data['user']['friends_count']
-        tweet_text = data['text']
-        tweet_convertedtime = datetime.datetime.fromtimestamp(tweet_timestamp/1000.0)
-
-        if 'text' in data:
-            print data['text'].encode('utf-8')
-            newtweet = data['text'].encode('utf-8')
-            newtweet = newtweet.lower()
-            newtweet = newtweet.replace(xmas_settings.TERMS, '')
-            newtweet = newtweet.replace('#', '')
-            theaterChase(strip, Color(255,255,255))
-            xmasChase(strip)
-            xmasFade(strip, 30)
-
-    def on_error(self, status_code, data):
-        print status_code
 
 # Define functions which animate LEDs in various ways.
 def lightStrip(strip, color1, color2, brightness):
@@ -211,14 +201,14 @@ if __name__ == '__main__':
 	strip.begin()
 
 	print ('Press Ctrl-C to quit.')
+        
+        app.run(host='0.0.0.0', port=5000)
 
-        try:
-                lightStrip(strip, 'navajowhite', 'royalblue', 30)
+#        try:
+#                lightStrip(strip, 'navajowhite', 'royalblue', 30)
 #                xmasTheaterChase(strip, 10)
 #                xmasFade(strip,50, 10)
 #                colorFade(strip, 'NavajoWhite', 50, 1200)
-#            stream = twitterStream(xmas_settings.APP_KEY, xmas_settings.APP_SECRET, xmas_settings.OAUTH_TOKEN, xmas_settings.OAUTH_TOKEN_SECRET)
-#            tweet = stream.statuses.filter(track=xmas_settings.TERMS)
 
-        except KeyboardInterrupt:
-            resetStrip(strip)
+#        except KeyboardInterrupt:
+#            resetStrip(strip)
