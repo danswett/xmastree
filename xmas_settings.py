@@ -1,19 +1,5 @@
 from neopixel import *
 
-# Twitter authentication
-APP_KEY = 'qwRDV1THc5SSJnCEH05fUQJ4x'
-APP_SECRET = '4LRzNc6UpP2vk4pKZf2lJFe2mTaBXiEp9gOJWBmsQQgHUnwRfe'
-OAUTH_TOKEN = '23281923-WLiGj9oWcO2pwfLoU732AVo8fmMJIUzKUz0xQStSe'
-OAUTH_TOKEN_SECRET = 'CTsTEdHviV33ti0f9gsSjKbRCAoNXckeA2QKHh06Z9j0n' 
-
-# Search term
-TERMS = 'twittertree'
-
-# Database config
-CONNECTION_STRING = "sqlite:///xmastweet.db"
-CSV_NAME = "xmastweet.csv"
-TABLE_NAME = "xmastweet"
-
 # LED strip configuration:
 LED_COUNT      = 350    # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
