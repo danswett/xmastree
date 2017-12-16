@@ -18,7 +18,7 @@ logging.getLogger("flask_ask").setLevel(logging.DEBUG)
 
 def alexa_control(status, pattern):
     if pattern in ['white']: lightStrip(strip, 'navajowhite', 'navajowhite', 30)
-    if pattern in ['colors']: xmasFade(strip, 30, 10)
+    if pattern in ['colors']: colorFade(strip, 'navajowhite', 'royalblue', 30, 1000)
     if pattern in ['blue']: lightStrip(strip, 'navajowhite', 'royalblue', 30)
     if pattern in ['off']: resetStrip(strip)
 
@@ -83,11 +83,14 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
                 strip.show()
                 time.sleep(wait_ms/1000.0)
 
-def colorFade(strip, color, brightness, fades, wait_ms=50):
+def colorFade(strip, color1, color2, brightness, fades, wait_ms=50):
     q = 0
-    for j in range(strip.numPixels()):
-        strip.setPixelColor(j, correctColor(color))
-    
+    for i in range(strip.numPixels()):
+        if i % 2 == 0:
+            strip.setPixelColor(i, correctColor(color2))
+        else:
+            strip.setPixelColor(i, correctColor(color1))
+   
     for e in range(fades):
         for i in range(q, brightness):
             strip.setBrightness(i)
