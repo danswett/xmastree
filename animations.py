@@ -12,15 +12,6 @@ xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
 
 xmasColor = ['red', 'royalblue', 'navajowhite', 'darkorange', 'limegreen']
 
-def testFunction(strip, color1, color2, brightness):
-    while True:
-        print 'One'
-
-def testFunction2(strip, color1, color2, brightness):
-    while True:
-        print 'Two'
-
-
 # Define functions which animate LEDs in various ways.
 def lightStrip(strip, color1, color2, brightness):
     for i in range(strip.numPixels()):
@@ -48,7 +39,7 @@ def xmasWipe(strip, wait_ms=50):
         else:
             j = 0
 
-def xmasFade(strip, brightness, fades, wait_ms=50):
+def xmasFade(strip, brightness, wait_ms=100):
     c = 0
     q = 0
     for j in range(strip.numPixels()):
@@ -57,14 +48,14 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
             c += 1
         else:
             c = 0
-    for e in range(fades):
+    while True:
         for i in range(q, brightness):
             strip.setBrightness(i)
             strip.show()
             time.sleep(wait_ms/1000.0)
             
         for i in reversed(range(brightness)):
-            if i == 15:
+            if i == 10:
                 q = i
                 break
             else:
@@ -72,7 +63,7 @@ def xmasFade(strip, brightness, fades, wait_ms=50):
                 strip.show()
                 time.sleep(wait_ms/1000.0)
 
-def colorFade(strip, color1, color2, brightness, fades, wait_ms=50):
+def colorFade(strip, color1, color2, brightness, wait_ms=100):
     q = 0
     for i in range(strip.numPixels()):
         if i % 2 == 0:
@@ -80,7 +71,7 @@ def colorFade(strip, color1, color2, brightness, fades, wait_ms=50):
         else:
             strip.setPixelColor(i, correctColor(color1))
    
-    for e in range(fades):
+    while True:
         for i in range(q, brightness):
             strip.setBrightness(i)
             strip.show()
@@ -109,11 +100,11 @@ def xmasChase(strip, wait_ms=50):
         else:
             j = 0
 
-def xmasTheaterChase(strip, iterations, wait_ms=150):
+def xmasTheaterChase(strip, wait_ms=150):
 # Movie theater light style chaser animation.
         strip.setBrightness(50)
         c = 0
-        for j in range(iterations):
+        while True:
 		for q in range(3):
 			for i in range(0, strip.numPixels(), 3):
                             strip.setPixelColor(i+q, correctColor(xmasColor[c]))
@@ -159,7 +150,8 @@ def rainbow(strip, wait_ms=20, iterations=1):
 
 def rainbowCycle(strip, wait_ms=20, iterations=5):
 # Draw rainbow that uniformly distributes itself across all pixels.
-	for j in range(256*iterations):
+    while True:
+        for j in range(256*iterations):
 		for i in range(strip.numPixels()):
 			strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
 		strip.show()

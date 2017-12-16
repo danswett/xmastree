@@ -25,9 +25,15 @@ def alexa_control(status, pattern):
     if pattern in ['white']:
         p = Process(target=lightStrip, args=(strip, 'navajowhite', 'navajowhite', 30))
     if pattern in ['colors']:
-        p = Process(target=colorFade, args=(strip, 'navajowhite', 'royalblue', 30, 1))
+        p = Process(target=xmasTheaterChase, args=(strip,))
+    if pattern in ['blue fade']:
+        p = Process(target=colorFade, args=(strip, 'navajowhite', 'royalblue', 40))
+    if pattern in ['white fade']:
+        p = Process(target=colorFade, args=(strip, 'navajowhite', 'navajowhite', 40))
     if pattern in ['blue']:
         p = Process(target=lightStrip, args=(strip, 'navajowhite', 'royalblue', 30))
+    if pattern in ['rave']:
+        p = Process(target=rainbowCycle, args=(strip,))
     if pattern in ['off']: resetStrip(strip)
 
     global processes
@@ -43,13 +49,12 @@ if __name__ == '__main__':
 
 	print ('Press Ctrl-C to quit.')
 
-        app.run(host='0.0.0.0', port=5000)
-
-#        try:
+        try:
+            app.run(host='0.0.0.0', port=5000)
 #                lightStrip(strip, 'navajowhite', 'royalblue', 30)
 #                xmasTheaterChase(strip, 10)
 #                xmasFade(strip,50, 10)
 #                colorFade(strip, 'NavajoWhite', 50, 1200)
 
-#        except KeyboardInterrupt:
-#            resetStrip(strip)
+        except KeyboardInterrupt:
+            resetStrip(strip)
