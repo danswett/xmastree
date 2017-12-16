@@ -2,7 +2,9 @@ import time
 import datetime
 import xmas_settings
 import logging
-import animations
+from animations import *
+import threading
+from multiprocessing import Process
 from neopixel import *
 from webcolors import *
 from colorcorrection import correctColor
@@ -15,23 +17,24 @@ ask = Ask(app, '/')
 
 logging.getLogger("flask_ask").setLevel(logging.DEBUG)
 
-@ask.intent('TreeIntent', mapping={'status': 'status', 'pattern': 'pattern'})
+processes = []
 
+@ask.intent('TreeIntent', mapping={'status': 'status', 'pattern': 'pattern'})
 def alexa_control(status, pattern):
-    if pattern in ['white']: lightStrip(strip, 'navajowhite', 'navajowhite', 30)
-    if pattern in ['colors']: colorFade(strip, 'navajowhite', 'royalblue', 30, 1000)
-    if pattern in ['blue']: lightStrip(strip, 'navajowhite', 'royalblue', 30)
+    [x.terminate() for x in processes]
+    if pattern in ['white']:
+        p = Process(target=lightStrip, args=(strip, 'navajowhite', 'navajowhite', 30))
+    if pattern in ['colors']:
+        p = Process(target=colorFade, args=(strip, 'navajowhite', 'royalblue', 30, 1))
+    if pattern in ['blue']:
+        p = Process(target=lightStrip, args=(strip, 'navajowhite', 'royalblue', 30))
     if pattern in ['off']: resetStrip(strip)
 
+    global processes
+    processes.append(p)
+    p.start()
+
     return statement('Setting tree to {}'.format(pattern))
-
-
-# LED colors:
-xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
-        'darkorange','NavajoWhite']
-
-xmasColor = ['red', 'royalblue', 'navajowhite', 'darkorange', 'limegreen']
-
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -39,7 +42,7 @@ if __name__ == '__main__':
 	strip.begin()
 
 	print ('Press Ctrl-C to quit.')
-        
+
         app.run(host='0.0.0.0', port=5000)
 
 #        try:

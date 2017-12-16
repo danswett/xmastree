@@ -12,6 +12,14 @@ xmasColorOld = ['red', 'gold', 'limegreen', 'cornflowerblue', \
 
 xmasColor = ['red', 'royalblue', 'navajowhite', 'darkorange', 'limegreen']
 
+def testFunction(strip, color1, color2, brightness):
+    while True:
+        print 'One'
+
+def testFunction2(strip, color1, color2, brightness):
+    while True:
+        print 'Two'
+
 
 # Define functions which animate LEDs in various ways.
 def lightStrip(strip, color1, color2, brightness):
